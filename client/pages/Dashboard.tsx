@@ -1,237 +1,582 @@
+import { useState } from "react";
+
 export function Dashboard() {
+  const [salesPeriod, setSalesPeriod] = useState<"daily" | "weekly" | "monthly">(
+    "monthly"
+  );
+
+  // Sample data for demonstration
+  const dashboardData = {
+    totalProducts: 9,
+    totalCustomers: 10,
+    totalSales: 38,
+    profitsGenerated: 43505.6,
+    lowStockCount: 4,
+    expiringCount: 2,
+    pendingOrders: 3,
+    totalSuppliers: 5,
+  };
+
+  const salesSummary = {
+    daily: {
+      amount: "₱3,200.45",
+      transactions: 5,
+      trend: "+12%",
+    },
+    weekly: {
+      amount: "₱18,950.80",
+      transactions: 22,
+      trend: "+8%",
+    },
+    monthly: {
+      amount: "₱43,505.60",
+      transactions: 38,
+      trend: "+15%",
+    },
+  };
+
+  const currentSalesSummary = salesSummary[salesPeriod];
+
   return (
-    <div className="flex-1 px-4 md:px-6 lg:px-7 py-4 md:py-6 overflow-y-auto">
+    <div className="flex-1 px-4 md:px-6 lg:px-7 py-4 md:py-6 overflow-y-auto space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="font-rajdhani text-3xl font-bold text-white letter-spacing-tight">
+          <h1 className="font-rajdhani text-3xl font-bold text-navy letter-spacing-tight">
             Dashboard
           </h1>
           <p className="text-xs text-muted mt-1">
-            Real-time operational overview
+            Real-time operational overview and key metrics
           </p>
+        </div>
+        <div className="text-xs text-muted">
+          Last updated: {new Date().toLocaleTimeString()}
         </div>
       </div>
 
-      {/* KPI Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+      {/* REQ-DASH-001: Central Display - KPI Stat Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           label="Total Products"
-          value="9"
+          value={dashboardData.totalProducts.toString()}
           subtitle="Active SKUs in inventory"
           colorIndex={0}
+          icon="📦"
+          trend="+2"
         />
         <StatCard
           label="Total Customers"
-          value="10"
+          value={dashboardData.totalCustomers.toString()}
           subtitle="Registered retail partners"
           colorIndex={1}
+          icon="🧑‍🤝‍🧑"
+          trend="+1"
         />
         <StatCard
           label="Total Sales"
-          value="38"
+          value={dashboardData.totalSales.toString()}
           subtitle="Transactions this period"
           colorIndex={2}
+          icon="💳"
+          trend="+5"
         />
         <StatCard
           label="Profits Generated"
-          value="₱43,505.60"
+          value={`₱${dashboardData.profitsGenerated.toLocaleString()}`}
           subtitle="Net revenue this month"
           colorIndex={3}
+          icon="💰"
+          trend="+15%"
           isGreen
         />
       </div>
 
-      {/* Alerts */}
-      <div className="mb-4 space-y-2">
+      {/* REQ-DASH-008: Alerts Section */}
+      <div className="space-y-2">
         <Alert
           type="danger"
           icon="⚠️"
-          title="4 products"
+          title={`${dashboardData.lowStockCount} products`}
           message="are below the reorder threshold of 100 units. Immediate restocking recommended."
+          count={dashboardData.lowStockCount}
         />
         <Alert
           type="warning"
           icon="🕐"
-          title="2 products"
+          title={`${dashboardData.expiringCount} products`}
           message="are nearing expiry within 7 days. Review Products Expiring section below."
+          count={dashboardData.expiringCount}
+        />
+        <Alert
+          type="warning"
+          icon="📋"
+          title={`${dashboardData.pendingOrders} pending orders`}
+          message="awaiting processing. Review supplier orders for quick fulfillment."
+          count={dashboardData.pendingOrders}
         />
       </div>
 
-      {/* Lowest Stock Widget */}
-      <div className="bg-white rounded-2xl border border-border p-5 mb-4">
-        <h3 className="font-rajdhani text-base font-semibold text-off-white mb-3.5">
-          Lowest Stock Items
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5">
-          <StockCard sku="7702031" qty="14" name="Hungarian Sausage w/Cheese" status="critical" />
-          <StockCard sku="7700169" qty="38" name="FF Bossing Cheesedog KingSize" status="warning" />
-          <StockCard sku="7700165" qty="56" name="FF Bossing Hatdogs KingSize" status="warning" />
-          <StockCard sku="7702041" qty="73" name="FF Bossing Chicken Hd Regular" status="ok" />
+      {/* Sales Summary Section - REQ-DASH-002 */}
+      <div className="bg-white rounded-2xl border border-border p-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div>
+            <h2 className="font-rajdhani text-xl font-bold text-navy letter-spacing-tight">
+              Sales Summary
+            </h2>
+            <p className="text-xs text-muted mt-1">
+              {salesPeriod.charAt(0).toUpperCase() + salesPeriod.slice(1)} breakdown
+            </p>
+          </div>
+          <div className="flex gap-2">
+            {(["daily", "weekly", "monthly"] as const).map((period) => (
+              <button
+                key={period}
+                onClick={() => setSalesPeriod(period)}
+                className={`px-4 py-2 rounded-lg text-xs font-semibold font-barlow-cond letter-spacing-tight transition-all ${
+                  salesPeriod === period
+                    ? "bg-accent-2 text-white"
+                    : "bg-off-white text-muted hover:bg-navy/10"
+                }`}
+              >
+                {period.charAt(0).toUpperCase() + period.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <SalesMetricCard
+            label={`${salesPeriod.charAt(0).toUpperCase() + salesPeriod.slice(1)} Sales`}
+            value={currentSalesSummary.amount}
+            subtext={`${currentSalesSummary.transactions} transactions`}
+            color="accent-2"
+          />
+          <SalesMetricCard
+            label="Growth Trend"
+            value={currentSalesSummary.trend}
+            subtext="vs previous period"
+            color="green"
+          />
+          <SalesMetricCard
+            label="Avg Transaction"
+            value={`₱${Math.round(parseFloat(currentSalesSummary.amount.replace(/₱|,/g, "")) / currentSalesSummary.transactions).toLocaleString()}`}
+            subtext="per transaction"
+            color="gold"
+          />
+        </div>
+
+        {/* Sales Chart */}
+        <div>
+          <h3 className="font-rajdhani text-sm font-semibold text-navy mb-4">
+            Sales Activity ({salesPeriod === "daily" ? "Hourly" : salesPeriod === "weekly" ? "Daily" : "Weekly"})
+          </h3>
+          <div className="flex items-end gap-1.5 h-40 px-2 bg-off-white rounded-lg p-4">
+            {[40, 90, 60, 120, 80, 50, 30].map((height, idx) => (
+              <div
+                key={idx}
+                className={`flex-1 rounded-t-sm transition-all relative group cursor-pointer hover:opacity-80`}
+                style={{
+                  height: `${height}%`,
+                  backgroundColor:
+                    idx < 5
+                      ? "hsl(var(--accent2))"
+                      : "hsl(var(--navy-light))",
+                }}
+                title={
+                  salesPeriod === "daily"
+                    ? `${9 + idx}:00 - ${(height * 100).toFixed(0)} units`
+                    : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][idx]
+                }
+              >
+                <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs text-muted opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  {height}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Latest Transactions + Expiring Products */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Latest Transactions */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-border p-5">
-          <h3 className="font-rajdhani text-base font-semibold text-off-white mb-3.5">
-            Latest Transactions
-          </h3>
-          <div className="overflow-x-auto text-xs md:text-sm">
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-3.5 py-2.5 text-left border-b border-border whitespace-nowrap">
-                    Sales ID
-                  </th>
-                  <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-3.5 py-2.5 text-left border-b border-border whitespace-nowrap">
-                    Amount
-                  </th>
-                  <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-3.5 py-2.5 text-left border-b border-border whitespace-nowrap">
-                    # Products
-                  </th>
-                  <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-3.5 py-2.5 text-left border-b border-border whitespace-nowrap">
-                    Customer
-                  </th>
-                  <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-3.5 py-2.5 text-left border-b border-border whitespace-nowrap">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { id: "SLS-006", amount: "₱12,024.48", products: "16", customer: "CUS-003", status: "Paid", color: "green" },
-                  { id: "SLS-005", amount: "₱17,300.96", products: "14", customer: "CUS-007", status: "Paid", color: "green" },
-                  { id: "SLS-004", amount: "₱3,123.80", products: "2", customer: "CUS-002", status: "Paid", color: "green" },
-                  { id: "SLS-003", amount: "₱1,060.20", products: "2", customer: "CUS-001", status: "Paid", color: "green" },
-                  { id: "SLS-002", amount: "₱2,499.04", products: "2", customer: "CUS-005", status: "Unpaid", color: "red" },
-                ].map((row) => (
-                  <tr key={row.id} className="border-b border-border hover:bg-white/3">
-                    <td className="px-3.5 py-2.5 text-sm text-off-white whitespace-nowrap">{row.id}</td>
-                    <td className="px-3.5 py-2.5 text-sm text-off-white whitespace-nowrap">{row.amount}</td>
-                    <td className="px-3.5 py-2.5 text-sm text-off-white whitespace-nowrap">{row.products}</td>
-                    <td className="px-3.5 py-2.5 text-sm text-off-white whitespace-nowrap">{row.customer}</td>
-                    <td className="px-3.5 py-2.5 text-sm whitespace-nowrap">
-                      <span
-                        className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold badge-${row.color}`}
-                      >
-                        {row.status}
-                      </span>
-                    </td>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* REQ-DASH-003: Inventory Status */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Inventory Status */}
+          <div className="bg-white rounded-2xl border border-border p-6">
+            <h2 className="font-rajdhani text-xl font-bold text-navy mb-4 letter-spacing-tight">
+              Inventory Status
+            </h2>
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <InventoryStatusCard
+                label="Total Items"
+                value="9"
+                subtext="SKUs tracked"
+                icon="📦"
+                color="accent-2"
+              />
+              <InventoryStatusCard
+                label="Low Stock"
+                value="4"
+                subtext="Need restocking"
+                icon="⚠️"
+                color="red"
+              />
+              <InventoryStatusCard
+                label="Expiring Soon"
+                value="2"
+                subtext="within 7 days"
+                icon="🕐"
+                color="gold"
+              />
+            </div>
+
+            <h3 className="font-rajdhani text-sm font-semibold text-navy mb-3">
+              Lowest Stock Items
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <StockCard
+                sku="7702031"
+                qty="14"
+                name="Hungarian Sausage w/Cheese"
+                status="critical"
+              />
+              <StockCard
+                sku="7700169"
+                qty="38"
+                name="FF Bossing Cheesedog KingSize"
+                status="warning"
+              />
+              <StockCard
+                sku="7700165"
+                qty="56"
+                name="FF Bossing Hatdogs KingSize"
+                status="warning"
+              />
+              <StockCard
+                sku="7702041"
+                qty="73"
+                name="FF Bossing Chicken Hd Regular"
+                status="ok"
+              />
+            </div>
+          </div>
+
+          {/* REQ-DASH-007: Activity Feed - Recent Transactions */}
+          <div className="bg-white rounded-2xl border border-border p-6">
+            <h2 className="font-rajdhani text-xl font-bold text-navy mb-4 letter-spacing-tight">
+              Recent Transactions
+            </h2>
+            <div className="overflow-x-auto text-xs md:text-sm">
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-3 py-3 text-left border-b border-border whitespace-nowrap">
+                      Sales ID
+                    </th>
+                    <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-3 py-3 text-left border-b border-border whitespace-nowrap hidden sm:table-cell">
+                      Customer
+                    </th>
+                    <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-3 py-3 text-left border-b border-border whitespace-nowrap">
+                      Amount
+                    </th>
+                    <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-3 py-3 text-left border-b border-border whitespace-nowrap">
+                      Status
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {[
+                    {
+                      id: "SLS-006",
+                      customer: "CUS-003",
+                      amount: "₱12,024.48",
+                      status: "Paid",
+                      color: "green",
+                    },
+                    {
+                      id: "SLS-005",
+                      customer: "CUS-007",
+                      amount: "₱17,300.96",
+                      status: "Paid",
+                      color: "green",
+                    },
+                    {
+                      id: "SLS-004",
+                      customer: "CUS-002",
+                      amount: "₱3,123.80",
+                      status: "Paid",
+                      color: "green",
+                    },
+                    {
+                      id: "SLS-003",
+                      customer: "CUS-001",
+                      amount: "₱1,060.20",
+                      status: "Paid",
+                      color: "green",
+                    },
+                    {
+                      id: "SLS-002",
+                      customer: "CUS-005",
+                      amount: "₱2,499.04",
+                      status: "Unpaid",
+                      color: "red",
+                    },
+                  ].map((row) => (
+                    <tr
+                      key={row.id}
+                      className="border-b border-border hover:bg-off-white/50 transition-colors"
+                    >
+                      <td className="px-3 py-3 text-navy font-semibold whitespace-nowrap">
+                        {row.id}
+                      </td>
+                      <td className="px-3 py-3 text-navy hidden sm:table-cell">
+                        {row.customer}
+                      </td>
+                      <td className="px-3 py-3 text-navy font-semibold whitespace-nowrap">
+                        {row.amount}
+                      </td>
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <span
+                          className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold badge-${row.color}`}
+                        >
+                          {row.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        {/* Expiring Products */}
-        <div className="bg-white rounded-2xl border border-border p-5">
-          <h3 className="font-rajdhani text-base font-semibold text-off-white mb-3.5">
-            Products Expiring Soon
-          </h3>
-          <div className="overflow-x-auto text-xs md:text-sm">
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-2 py-2.5 text-left border-b border-border whitespace-nowrap">
-                    SKU Code
-                  </th>
-                  <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-2 py-2.5 text-left border-b border-border whitespace-nowrap">
-                    Qty
-                  </th>
-                  <th className="bg-navy-mid text-muted font-barlow-cond text-xs font-bold letter-spacing-wider uppercase px-2 py-2.5 text-left border-b border-border whitespace-nowrap">
-                    Expiry
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { sku: "7700165", qty: "56", expiry: "May 05, 2026", color: "red" },
-                  { sku: "7702031", qty: "14", expiry: "May 12, 2026", color: "gold" },
-                  { sku: "7700169", qty: "38", expiry: "May 18, 2026", color: "gold" },
-                ].map((row) => (
-                  <tr key={row.sku} className="border-b border-border">
-                    <td className="px-2 py-2.5 text-sm text-off-white">{row.sku}</td>
-                    <td className="px-2 py-2.5 text-sm text-off-white">{row.qty}</td>
-                    <td className="px-2 py-2.5 text-sm">
-                      <span className={`badge-${row.color}`}>{row.expiry}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Right Column */}
+        <div className="space-y-6">
+          {/* REQ-DASH-004: Customer Stats */}
+          <div className="bg-white rounded-2xl border border-border p-6">
+            <h2 className="font-rajdhani text-xl font-bold text-navy mb-4 letter-spacing-tight">
+              Customer Statistics
+            </h2>
+            <div className="space-y-4">
+              <StatItem
+                label="Total Customers"
+                value="10"
+                icon="👥"
+                color="accent-2"
+              />
+              <StatItem
+                label="Active Customers"
+                value="9"
+                icon="✅"
+                color="green"
+              />
+              <StatItem
+                label="Inactive Customers"
+                value="1"
+                icon="⏸️"
+                color="gold"
+              />
+              <StatItem
+                label="New This Month"
+                value="2"
+                icon="🆕"
+                color="accent-2"
+              />
+            </div>
           </div>
 
-          {/* Sales Activity Chart */}
-          <div className="mt-4 pt-4 border-t border-border">
-            <h4 className="font-rajdhani text-base font-semibold text-off-white mb-2.5">
-              Sales Activity (Last 7 Days)
-            </h4>
-            <div className="flex items-end gap-1.5 h-32 px-2">
-              {[40, 90, 60, 120, 80, 50, 30].map((height, idx) => (
+          {/* REQ-DASH-005: Supplier Stats */}
+          <div className="bg-white rounded-2xl border border-border p-6">
+            <h2 className="font-rajdhani text-xl font-bold text-navy mb-4 letter-spacing-tight">
+              Supplier Information
+            </h2>
+            <div className="space-y-4">
+              <StatItem
+                label="Total Suppliers"
+                value="5"
+                icon="🏭"
+                color="accent-2"
+              />
+              <StatItem
+                label="Active Suppliers"
+                value="5"
+                icon="✅"
+                color="green"
+              />
+              <StatItem
+                label="Pending Orders"
+                value="3"
+                icon="📦"
+                color="gold"
+              />
+              <StatItem
+                label="Total SKUs"
+                value="9"
+                icon="📋"
+                color="accent-2"
+              />
+            </div>
+          </div>
+
+          {/* REQ-DASH-008: Products Expiring Soon */}
+          <div className="bg-white rounded-2xl border border-border p-6">
+            <h2 className="font-rajdhani text-lg font-bold text-navy mb-4 letter-spacing-tight">
+              Expiring Soon
+            </h2>
+            <div className="space-y-2">
+              {[
+                {
+                  sku: "7700165",
+                  name: "FF Bossing Hatdogs",
+                  expiry: "May 05, 2026",
+                  color: "red",
+                },
+                {
+                  sku: "7702031",
+                  name: "Hungarian Sausage",
+                  expiry: "May 12, 2026",
+                  color: "gold",
+                },
+                {
+                  sku: "7700169",
+                  name: "FF Bossing Cheesedog",
+                  expiry: "May 18, 2026",
+                  color: "gold",
+                },
+              ].map((item) => (
                 <div
-                  key={idx}
-                  className={`flex-1 rounded-t-sm transition-all ${
-                    idx < 5 ? "bg-accent-2" : "bg-navy-light"
-                  }`}
-                  style={{ height: `${height}%` }}
-                  title={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][idx]}
-                />
+                  key={item.sku}
+                  className={`p-3 rounded-lg border-l-4 border-${item.color} bg-${item.color}/5`}
+                >
+                  <div className="font-semibold text-navy text-xs">{item.sku}</div>
+                  <div className="text-xs text-muted mt-0.5">{item.name}</div>
+                  <div className={`text-xs font-bold text-${item.color} mt-1`}>
+                    {item.expiry}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
+
+          {/* Quick Links - REQ-DASH-006: Navigation */}
+          <div className="bg-white rounded-2xl border border-border p-6">
+            <h2 className="font-rajdhani text-lg font-bold text-navy mb-4 letter-spacing-tight">
+              Quick Actions
+            </h2>
+            <div className="space-y-2 text-xs">
+              <button className="w-full px-4 py-2 bg-accent-2 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                📋 Generate Report
+              </button>
+              <button className="w-full px-4 py-2 bg-green text-white rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                ➕ New Transaction
+              </button>
+              <button className="w-full px-4 py-2 bg-gold text-white rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                📦 Manage Inventory
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* REQ-DASH-008: Performance Metrics Section */}
+      <div className="bg-white rounded-2xl border border-border p-6">
+        <h2 className="font-rajdhani text-xl font-bold text-navy mb-6 letter-spacing-tight">
+          Performance Metrics
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <MetricCard
+            label="Avg Order Value"
+            value="₱1,144.89"
+            change="+5.2%"
+            icon="💹"
+          />
+          <MetricCard
+            label="Inventory Turnover"
+            value="4.2x"
+            change="+12%"
+            icon="🔄"
+          />
+          <MetricCard
+            label="Customer Retention"
+            value="92%"
+            change="+3%"
+            icon="👥"
+          />
+          <MetricCard
+            label="Profit Margin"
+            value="51.4%"
+            change="+2.1%"
+            icon="📊"
+          />
         </div>
       </div>
     </div>
   );
 }
 
+// Component: Stat Card
 function StatCard({
   label,
   value,
   subtitle,
   colorIndex,
+  icon,
+  trend,
   isGreen,
 }: {
   label: string;
   value: string;
   subtitle: string;
   colorIndex: number;
+  icon?: string;
+  trend?: string;
   isGreen?: boolean;
 }) {
-  const colors = ["accent-2", "gold", "green", "purple"];
+  const colors = ["accent-2", "gold", "green", "red"];
   const color = colors[colorIndex] || "accent-2";
 
   return (
-    <div className="bg-white border border-border rounded-2xl p-4.5 flex flex-col gap-1 relative overflow-hidden transition-all hover:shadow-lg hover:-translate-y-0.5">
+    <div className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-2 relative overflow-hidden transition-all hover:shadow-lg hover:-translate-y-0.5">
       <div
-        className={`absolute top-0 left-0 right-0 h-0.75 rounded-3xl rounded-b-none bg-${color}`}
+        className={`absolute top-0 left-0 right-0 h-1 rounded-3xl rounded-b-none bg-${color}`}
       ></div>
-      <div className="text-xs text-muted font-semibold letter-spacing-tight uppercase">
-        {label}
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <div className="text-xs text-muted font-semibold letter-spacing-tight uppercase">
+            {label}
+          </div>
+          <div
+            className={`font-rajdhani text-3xl font-bold text-navy leading-none ${isGreen ? "text-green" : ""}`}
+          >
+            {value}
+          </div>
+        </div>
+        {icon && <span className="text-3xl">{icon}</span>}
       </div>
-      <div
-        className={`font-rajdhani text-3xl font-bold text-navy leading-none ${isGreen ? "text-green" : ""}`}
-      >
-        {value}
+      <div className="flex items-center justify-between">
+        <div className="text-xs text-muted mt-1">{subtitle}</div>
+        {trend && (
+          <span className="text-xs font-semibold text-green bg-green/10 px-2 py-1 rounded">
+            {trend}
+          </span>
+        )}
       </div>
-      <div className="text-xs text-muted mt-0.5">{subtitle}</div>
     </div>
   );
 }
 
+// Component: Alert
 function Alert({
   type,
   icon,
   title,
   message,
+  count,
 }: {
   type: "danger" | "warning";
   icon: string;
   title: string;
   message: string;
+  count: number;
 }) {
   const bgColor =
     type === "danger"
@@ -239,15 +584,24 @@ function Alert({
       : "bg-gold/10 border-gold/30 text-gold";
 
   return (
-    <div className={`flex items-center gap-2.5 px-4 py-3 rounded-lg border ${bgColor}`}>
-      <span>{icon}</span>
-      <div className="text-sm">
-        <strong>{title}</strong> {message}
+    <div
+      className={`flex items-start gap-3 px-4 py-4 rounded-lg border ${bgColor} hover:shadow-md transition-shadow`}
+    >
+      <span className="text-xl flex-shrink-0">{icon}</span>
+      <div className="flex-1">
+        <div className="text-sm font-semibold">{title}</div>
+        <p className="text-sm mt-1 opacity-90">{message}</p>
+      </div>
+      <div
+        className={`px-3 py-1 rounded-full text-xs font-bold flex-shrink-0 ${type === "danger" ? "bg-red text-white" : "bg-gold text-white"}`}
+      >
+        {count}
       </div>
     </div>
   );
 }
 
+// Component: Stock Card
 function StockCard({
   sku,
   qty,
@@ -265,13 +619,129 @@ function StockCard({
     ok: "text-green",
   };
 
+  const bgColors = {
+    critical: "bg-red/10",
+    warning: "bg-gold/10",
+    ok: "bg-green/10",
+  };
+
   return (
-    <div className="bg-navy-mid border border-border rounded-2xl p-3.5">
-      <div className="text-xs text-muted mb-1">[{sku}]</div>
-      <div className={`font-rajdhani text-4xl font-bold ${statusColors[status]}`}>
+    <div
+      className={`${bgColors[status]} border border-border rounded-xl p-3 hover:shadow-md transition-shadow`}
+    >
+      <div className="text-xs text-muted font-semibold">{sku}</div>
+      <div className={`font-rajdhani text-3xl font-bold ${statusColors[status]} mt-1`}>
         {qty}
       </div>
-      <div className="text-xs text-muted mt-0.5">{name}</div>
+      <div className="text-xs text-muted mt-2 line-clamp-2">{name}</div>
+    </div>
+  );
+}
+
+// Component: Sales Metric Card
+function SalesMetricCard({
+  label,
+  value,
+  subtext,
+  color,
+}: {
+  label: string;
+  value: string;
+  subtext: string;
+  color: string;
+}) {
+  return (
+    <div className={`bg-${color}/10 border border-${color}/30 rounded-xl p-4`}>
+      <div className="text-xs text-muted font-semibold uppercase letter-spacing-tight">
+        {label}
+      </div>
+      <div className={`font-rajdhani text-2xl font-bold text-${color} mt-2`}>
+        {value}
+      </div>
+      <div className="text-xs text-muted mt-2">{subtext}</div>
+    </div>
+  );
+}
+
+// Component: Inventory Status Card
+function InventoryStatusCard({
+  label,
+  value,
+  subtext,
+  icon,
+  color,
+}: {
+  label: string;
+  value: string;
+  subtext: string;
+  icon: string;
+  color: string;
+}) {
+  return (
+    <div className={`bg-${color}/10 border border-${color}/30 rounded-lg p-4 text-center`}>
+      <div className="text-2xl mb-2">{icon}</div>
+      <div className={`font-rajdhani text-2xl font-bold text-${color}`}>
+        {value}
+      </div>
+      <div className="text-xs text-muted mt-2">{label}</div>
+      <div className="text-xs text-muted mt-0.5">{subtext}</div>
+    </div>
+  );
+}
+
+// Component: Stat Item
+function StatItem({
+  label,
+  value,
+  icon,
+  color,
+}: {
+  label: string;
+  value: string;
+  icon: string;
+  color: string;
+}) {
+  return (
+    <div className="flex items-center justify-between p-3 bg-off-white rounded-lg hover:bg-navy/5 transition-colors">
+      <div className="flex items-center gap-2">
+        <span className="text-xl">{icon}</span>
+        <div className="text-sm text-muted">{label}</div>
+      </div>
+      <div className={`font-rajdhani text-lg font-bold text-${color}`}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+// Component: Metric Card
+function MetricCard({
+  label,
+  value,
+  change,
+  icon,
+}: {
+  label: string;
+  value: string;
+  change: string;
+  icon: string;
+}) {
+  return (
+    <div className="bg-off-white rounded-lg p-4 hover:shadow-md transition-shadow">
+      <div className="flex items-start justify-between">
+        <div>
+          <div className="text-xs text-muted font-semibold uppercase letter-spacing-tight">
+            {label}
+          </div>
+          <div className="font-rajdhani text-2xl font-bold text-navy mt-2">
+            {value}
+          </div>
+        </div>
+        <span className="text-2xl">{icon}</span>
+      </div>
+      <div className="flex items-center gap-1 mt-3 text-xs font-semibold text-green">
+        ↑ {change}
+      </div>
     </div>
   );
 }
