@@ -477,38 +477,6 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* REQ-DASH-008: Performance Metrics Section */}
-      <div className="bg-white rounded-2xl border border-border p-6">
-        <h2 className="font-rajdhani text-xl font-bold text-navy mb-6 letter-spacing-tight">
-          Performance Metrics
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <MetricCard
-            label="Avg Order Value"
-            value="₱1,144.89"
-            change="+5.2%"
-            icon="💹"
-          />
-          <MetricCard
-            label="Inventory Turnover"
-            value="4.2x"
-            change="+12%"
-            icon="🔄"
-          />
-          <MetricCard
-            label="Customer Retention"
-            value="92%"
-            change="+3%"
-            icon="👥"
-          />
-          <MetricCard
-            label="Profit Margin"
-            value="51.4%"
-            change="+2.1%"
-            icon="📊"
-          />
-        </div>
-      </div>
     </div>
   );
 }
@@ -709,38 +677,6 @@ function StatItem({
       </div>
       <div className={`font-rajdhani text-lg font-bold text-${color}`}>
         {value}
-      </div>
-    </div>
-  );
-}
-
-// Component: Metric Card
-function MetricCard({
-  label,
-  value,
-  change,
-  icon,
-}: {
-  label: string;
-  value: string;
-  change: string;
-  icon: string;
-}) {
-  return (
-    <div className="bg-off-white rounded-lg p-4 hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="text-xs text-muted font-semibold uppercase letter-spacing-tight">
-            {label}
-          </div>
-          <div className="font-rajdhani text-2xl font-bold text-navy mt-2">
-            {value}
-          </div>
-        </div>
-        <span className="text-2xl">{icon}</span>
-      </div>
-      <div className="flex items-center gap-1 mt-3 text-xs font-semibold text-green">
-        ↑ {change}
       </div>
     </div>
   );
