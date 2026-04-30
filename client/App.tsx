@@ -31,15 +31,6 @@ const AppContent = () => {
         return <Dashboard />;
       case "inventory":
         return <Inventory />;
-      case "supplier":
-        return (
-          <PlaceholderPanel
-            title="Supplier Management"
-            description="Track all product suppliers and purchase orders"
-            icon="🏭"
-            panelId="supplier"
-          />
-        );
       case "sales":
         return (
           <PlaceholderPanel

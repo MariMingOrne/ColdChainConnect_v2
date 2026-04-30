@@ -11,7 +11,6 @@ export function Sidebar({ activePanel, onPanelChange, onLogout }: SidebarProps) 
   const navItems = [
     { id: "dashboard", icon: "⬛", label: "Dashboard" },
     { id: "inventory", icon: "📦", label: "Inventory Management" },
-    { id: "supplier", icon: "🏭", label: "Supplier Management" },
     { id: "sales", icon: "💳", label: "Sales Management" },
     { id: "ar", icon: "📋", label: "Accounts Receivable" },
     { id: "customers", icon: "🧑‍🤝‍🧑", label: "Customer Management" },
