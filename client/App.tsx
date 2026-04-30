@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
+import { Inventory } from "./pages/Inventory";
 import { PlaceholderPanel } from "./pages/PlaceholderPanel";
 import { Sidebar } from "./components/Sidebar";
 import { Topbar } from "./components/Topbar";
@@ -29,14 +30,7 @@ const AppContent = () => {
       case "dashboard":
         return <Dashboard />;
       case "inventory":
-        return (
-          <PlaceholderPanel
-            title="Inventory Management"
-            description="Track, manage, and monitor all frozen goods SKUs"
-            icon="📦"
-            panelId="inventory"
-          />
-        );
+        return <Inventory />;
       case "supplier":
         return (
           <PlaceholderPanel
