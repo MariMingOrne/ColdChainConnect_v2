@@ -12,6 +12,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Inventory } from "./pages/Inventory";
 import { TrucksInTransit } from "./pages/TrucksInTransit";
 import { Sales } from "./pages/Sales";
+import { Payroll } from "./pages/Payroll";
 import { PlaceholderPanel } from "./pages/PlaceholderPanel";
 import { Sidebar } from "./components/Sidebar";
 import { Topbar } from "./components/Topbar";
@@ -44,24 +45,6 @@ const AppContent = () => {
             icon="🧑‍🤝‍🧑"
             panelId="customers"
           />
-       );
-      case "ar":
-        return (
-          <PlaceholderPanel
-            title="Accounts Receivable"
-            description="Monitor credit balances and aging reports"
-            icon="📋"
-            panelId="ar"
-          />
-        );
-      case "customers":
-        return (
-          <PlaceholderPanel
-            title="Customer Management"
-            description="All registered retail partners and sari-sari stores"
-            icon="🧑‍🤝‍🧑"
-            panelId="customers"
-          />
         );
       case "employees":
         return (
@@ -73,14 +56,7 @@ const AppContent = () => {
           />
         );
       case "payroll":
-        return (
-          <PlaceholderPanel
-            title="Payroll"
-            description="Employee salaries & agent commission management"
-            icon="💰"
-            panelId="payroll"
-          />
-        );
+        return <Payroll />;
       case "expenses":
         return (
           <PlaceholderPanel
