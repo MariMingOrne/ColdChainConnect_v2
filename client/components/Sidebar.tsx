@@ -28,7 +28,6 @@ export function Sidebar({ activePanel, onPanelChange, onLogout }: SidebarProps) 
   const additionalItems = [
     { id: "payroll", icon: "💰", label: "Payroll" },
     { id: "expenses", icon: "🧾", label: "Expenses & Finance" },
-    { id: "forecasting", icon: "📈", label: "AI Forecasting" },
     { id: "reports", icon: "📑", label: "Reports" },
   ];
 

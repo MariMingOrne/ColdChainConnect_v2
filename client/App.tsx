@@ -11,6 +11,7 @@ import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
 import { Inventory } from "./pages/Inventory";
 import { TrucksInTransit } from "./pages/TrucksInTransit";
+import { Sales } from "./pages/Sales";
 import { PlaceholderPanel } from "./pages/PlaceholderPanel";
 import { Sidebar } from "./components/Sidebar";
 import { Topbar } from "./components/Topbar";
@@ -34,14 +35,7 @@ const AppContent = () => {
       case "inventory":
         return <Inventory />;
       case "sales":
-        return (
-          <PlaceholderPanel
-            title="Sales Management"
-            description="Record and track all sales transactions"
-            icon="💳"
-            panelId="sales"
-          />
-        );
+        return <Sales />;
       case "customers":
         return (
           <PlaceholderPanel
