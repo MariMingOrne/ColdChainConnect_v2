@@ -12,6 +12,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Inventory } from "./pages/Inventory";
 import { Sales } from "./pages/Sales";
 import { EmployeeManagement } from "./pages/EmployeeManagement";
+import { Payroll } from "./pages/Payroll";
 import { PlaceholderPanel } from "./pages/PlaceholderPanel";
 import { Sidebar } from "./components/Sidebar";
 import { Topbar } from "./components/Topbar";
@@ -57,14 +58,7 @@ const AppContent = () => {
       case "employees":
         return <EmployeeManagement />;
       case "payroll":
-        return (
-          <PlaceholderPanel
-            title="Payroll"
-            description="Employee salaries & agent commission management"
-            icon="💰"
-            panelId="payroll"
-          />
-        );
+        return <Payroll />;
       case "expenses":
         return (
           <PlaceholderPanel
