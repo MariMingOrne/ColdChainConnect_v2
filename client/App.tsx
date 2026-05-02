@@ -46,15 +46,6 @@ const AppContent = () => {
             panelId="customers"
           />
         );
-      case "ar":
-        return (
-          <PlaceholderPanel
-            title="Accounts Receivable"
-            description="Monitor credit balances and aging reports"
-            icon="📋"
-            panelId="ar"
-          />
-        );
       case "employees":
         return <EmployeeManagement />;
       case "payroll":
