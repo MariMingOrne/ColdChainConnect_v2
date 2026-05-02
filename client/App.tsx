@@ -11,7 +11,7 @@ import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
 import { Inventory } from "./pages/Inventory";
 import { Sales } from "./pages/Sales";
-
+import { EmployeeManagement } from "./pages/EmployeeManagement";
 import { PlaceholderPanel } from "./pages/PlaceholderPanel";
 import { Sidebar } from "./components/Sidebar";
 import { Topbar } from "./components/Topbar";
@@ -44,7 +44,7 @@ const AppContent = () => {
             icon="🧑‍🤝‍🧑"
             panelId="customers"
           />
-       );
+        );
       case "ar":
         return (
           <PlaceholderPanel
@@ -52,15 +52,6 @@ const AppContent = () => {
             description="Monitor credit balances and aging reports"
             icon="📋"
             panelId="ar"
-          />
-        );
-      case "customers":
-        return (
-          <PlaceholderPanel
-            title="Customer Management"
-            description="All registered retail partners and sari-sari stores"
-            icon="🧑‍🤝‍🧑"
-            panelId="customers"
           />
         );
       case "employees":
@@ -84,7 +75,14 @@ const AppContent = () => {
           />
         );
       case "trucks":
-        return <TrucksInTransit />;
+        return (
+          <PlaceholderPanel
+            title="Trucks In Transit"
+            description="Track active shipments and delivery routes"
+            icon="🚚"
+            panelId="trucks"
+          />
+        );
       case "reports":
         return (
           <PlaceholderPanel
