@@ -11,6 +11,7 @@ import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
 import { Inventory } from "./pages/Inventory";
 import { Sales } from "./pages/Sales";
+import { Employees } from "./pages/Employees";
 import { TrucksInTransit } from "./pages/TrucksInTransit";
 import { PlaceholderPanel } from "./pages/PlaceholderPanel";
 import { Sidebar } from "./components/Sidebar";
