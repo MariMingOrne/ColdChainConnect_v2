@@ -11,7 +11,7 @@ interface TruckDelivery {
   destination: string;
   departureTime: string;
   estimatedArrival: string;
-  status: "in_storage" | "being_delivered" | "arrived";
+  status: "in_storage" | "in_transit" | "delivered" | "missing";
   progress: number; // 0-100
   items: DeliveryItem[];
   currentLocation?: string;
@@ -24,7 +24,7 @@ interface DeliveryItem {
   description: string;
   qrCode: string;
   quantity: number;
-  status: "in_storage" | "being_delivered" | "arrived";
+  status: "in_storage" | "in_transit" | "delivered" | "missing";
 }
 
 export function TrucksInTransit() {
@@ -38,7 +38,7 @@ export function TrucksInTransit() {
       destination: "Various Retail Stores",
       departureTime: "08:00 AM",
       estimatedArrival: "02:30 PM",
-      status: "being_delivered",
+      status: "in_transit",
       progress: 65,
       currentLocation: "San Fernando, Pampanga",
       lastUpdate: "2026-04-30 11:45 AM",
@@ -49,7 +49,7 @@ export function TrucksInTransit() {
           description: "FF Bossing Hatdogs KingSize",
           qrCode: "QR-20260430-001",
           quantity: 20,
-          status: "being_delivered",
+          status: "in_transit",
         },
         {
           id: "2",
@@ -57,7 +57,7 @@ export function TrucksInTransit() {
           description: "FF Bossing Cheesedog KingSize",
           qrCode: "QR-20260430-002",
           quantity: 10,
-          status: "being_delivered",
+          status: "in_transit",
         },
       ],
     },
@@ -70,7 +70,7 @@ export function TrucksInTransit() {
       destination: "Makati Retail Partners",
       departureTime: "08:15 AM",
       estimatedArrival: "04:00 PM",
-      status: "being_delivered",
+      status: "in_transit",
       progress: 45,
       currentLocation: "Makati, Metro Manila",
       lastUpdate: "2026-04-30 11:50 AM",
@@ -81,7 +81,7 @@ export function TrucksInTransit() {
           description: "McCain Fries",
           qrCode: "QR-20260430-003",
           quantity: 6,
-          status: "being_delivered",
+          status: "in_transit",
         },
       ],
     },
@@ -94,7 +94,7 @@ export function TrucksInTransit() {
       destination: "Cavite Distribution Center",
       departureTime: "09:00 AM",
       estimatedArrival: "01:00 PM",
-      status: "being_delivered",
+      status: "in_transit",
       progress: 80,
       currentLocation: "Kawit, Cavite",
       lastUpdate: "2026-04-30 11:55 AM",
@@ -105,7 +105,7 @@ export function TrucksInTransit() {
           description: "FF Bossing Cheesedogs",
           qrCode: "QR-20260430-004",
           quantity: 15,
-          status: "being_delivered",
+          status: "in_transit",
         },
       ],
     },
@@ -153,8 +153,8 @@ export function TrucksInTransit() {
               // Cycle through statuses
               const statusCycle = [
                 "in_storage",
-                "being_delivered",
-                "arrived",
+                "in_transit",
+                "delivered",
               ] as const;
               const currentIndex = statusCycle.indexOf(item.status);
               const nextStatus = statusCycle[(currentIndex + 1) % statusCycle.length];
@@ -176,6 +176,31 @@ export function TrucksInTransit() {
       closeCamera();
       setShowQRScanner(false);
     }
+  };
+
+  // Handle item status change from dropdown
+  const handleItemStatusChange = (
+    truckId: string,
+    itemId: string,
+    newStatus: "in_storage" | "in_transit" | "delivered" | "missing"
+  ) => {
+    const updatedTrucks = trucks.map((truck) => {
+      if (truck.id === truckId) {
+        const updatedItems = truck.items.map((item) => {
+          if (item.id === itemId) {
+            return { ...item, status: newStatus };
+          }
+          return item;
+        });
+        return { ...truck, items: updatedItems };
+      }
+      return truck;
+    });
+
+    setTrucks(updatedTrucks);
+    setSelectedTruck(
+      updatedTrucks.find((t) => t.id === selectedTruck?.id) || null
+    );
   };
 
   return (
@@ -360,7 +385,12 @@ export function TrucksInTransit() {
                         {item.quantity}
                       </td>
                       <td className="px-3 py-3">
-                        <ItemStatusBadge status={item.status} />
+                        <ItemStatusDropdown
+                          status={item.status}
+                          onChange={(newStatus) =>
+                            handleItemStatusChange(selectedTruck.id, item.id, newStatus)
+                          }
+                        />
                       </td>
                     </tr>
                   ))}
@@ -396,13 +426,14 @@ function StatusBadge({
   status,
   size = "sm",
 }: {
-  status: "in_storage" | "being_delivered" | "arrived";
+  status: "in_storage" | "in_transit" | "delivered" | "missing";
   size?: "sm" | "lg";
 }) {
   const statusMap = {
     in_storage: { label: "In Storage", color: "blue", icon: "📦" },
-    being_delivered: { label: "Being Delivered", color: "gold", icon: "🚚" },
-    arrived: { label: "Arrived", color: "green", icon: "✅" },
+    in_transit: { label: "In Transit", color: "gold", icon: "🚚" },
+    delivered: { label: "Delivered", color: "green", icon: "✅" },
+    missing: { label: "Missing", color: "red", icon: "⚠️" },
   };
 
   const config = statusMap[status];
@@ -418,28 +449,33 @@ function StatusBadge({
   );
 }
 
-// Item Status Badge
-function ItemStatusBadge({
+// Item Status Dropdown
+function ItemStatusDropdown({
   status,
+  onChange,
 }: {
-  status: "in_storage" | "being_delivered" | "arrived";
+  status: "in_storage" | "in_transit" | "delivered" | "missing";
+  onChange: (status: "in_storage" | "in_transit" | "delivered" | "missing") => void;
 }) {
-  const colors = {
-    in_storage: "badge-blue",
-    being_delivered: "badge-gold",
-    arrived: "badge-green",
-  };
-
-  const labels = {
-    in_storage: "In Storage",
-    being_delivered: "Delivering",
-    arrived: "Arrived",
-  };
+  const statusOptions = [
+    { value: "in_storage", label: "In Storage", icon: "📦" },
+    { value: "in_transit", label: "In Transit", icon: "🚚" },
+    { value: "delivered", label: "Delivered", icon: "✅" },
+    { value: "missing", label: "Missing", icon: "⚠️" },
+  ];
 
   return (
-    <span className={`px-2.5 py-0.5 rounded-lg text-xs font-semibold ${colors[status]}`}>
-      {labels[status]}
-    </span>
+    <select
+      value={status}
+      onChange={(e) => onChange(e.target.value as "in_storage" | "in_transit" | "delivered" | "missing")}
+      className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-border bg-white text-navy hover:border-accent-2 focus:outline-none focus:border-accent-2 cursor-pointer"
+    >
+      {statusOptions.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.icon} {option.label}
+        </option>
+      ))}
+    </select>
   );
 }
 
