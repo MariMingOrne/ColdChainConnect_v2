@@ -48,8 +48,6 @@ export function Dashboard() {
 
   const currentPeriodData = periodData[period];
 
-  const currentSalesSummary = salesSummary[salesPeriod];
-
   return (
     <div className="flex-1 px-4 md:px-6 lg:px-7 py-4 md:py-6 overflow-y-auto space-y-6">
       {/* Header */}
