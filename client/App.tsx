@@ -11,9 +11,11 @@ import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
 import { Inventory } from "./pages/Inventory";
 import { Sales } from "./pages/Sales";
-import { Employees } from "./pages/Employees";
-import { TrucksInTransit } from "./pages/TrucksInTransit";
+import { Customer } from "./pages/Customer";
+import { EmployeeManagement } from "./pages/EmployeeManagement";
+import { Payroll } from "./pages/Payroll";
 import { PlaceholderPanel } from "./pages/PlaceholderPanel";
+import { TrucksInTransit } from "./pages/TrucksInTransit";
 import { Sidebar } from "./components/Sidebar";
 import { Topbar } from "./components/Topbar";
 import NotFound from "./pages/NotFound";
@@ -38,50 +40,11 @@ const AppContent = () => {
       case "sales":
         return <Sales />;
       case "customers":
-        return (
-          <PlaceholderPanel
-            title="Customer Management"
-            description="All registered retail partners and sari-sari stores"
-            icon="🧑‍🤝‍🧑"
-            panelId="customers"
-          />
-       );
-      case "ar":
-        return (
-          <PlaceholderPanel
-            title="Accounts Receivable"
-            description="Monitor credit balances and aging reports"
-            icon="📋"
-            panelId="ar"
-          />
-        );
-      case "customers":
-        return (
-          <PlaceholderPanel
-            title="Customer Management"
-            description="All registered retail partners and sari-sari stores"
-            icon="🧑‍🤝‍🧑"
-            panelId="customers"
-          />
-        );
+        return <Customer />;
       case "employees":
-        return (
-          <PlaceholderPanel
-            title="Employee Management"
-            description="Manage staff accounts and access levels"
-            icon="🪪"
-            panelId="employees"
-          />
-        );
+        return <EmployeeManagement />;
       case "payroll":
-        return (
-          <PlaceholderPanel
-            title="Payroll"
-            description="Employee salaries & agent commission management"
-            icon="💰"
-            panelId="payroll"
-          />
-        );
+        return <Payroll />;
       case "expenses":
         return (
           <PlaceholderPanel
