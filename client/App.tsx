@@ -62,24 +62,27 @@ const AppContent = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <Sidebar
-        activePanel={activePanel}
-        onPanelChange={setActivePanel}
-        onLogout={() => setIsLoggedIn(false)}
+    <div className="flex flex-col min-h-screen">
+      {/* Topbar - Full Width */}
+      <Topbar
+        userName="Mizael Anton"
+        onSettingsClick={() => setActivePanel("settings")}
       />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-screen bg-off-white min-w-0">
-        {/* Topbar */}
-        <Topbar
-          userName="Mizael Anton"
-          onSettingsClick={() => setActivePanel("settings")}
+      {/* Sidebar + Main Content Area */}
+      <div className="flex flex-1 min-h-0">
+        {/* Sidebar */}
+        <Sidebar
+          activePanel={activePanel}
+          onPanelChange={setActivePanel}
+          onLogout={() => setIsLoggedIn(false)}
         />
 
-        {/* Panel Content */}
-        {renderPanel()}
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col bg-off-white min-w-0">
+          {/* Panel Content */}
+          {renderPanel()}
+        </div>
       </div>
     </div>
   );
