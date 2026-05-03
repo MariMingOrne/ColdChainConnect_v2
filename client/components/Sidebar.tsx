@@ -26,12 +26,7 @@ export function Sidebar({ activePanel, onPanelChange, onLogout }: SidebarProps) 
   const systemItems: typeof additionalItems = [];
 
   return (
-    <nav className="hidden md:flex w-72 bg-navy text-white flex-col items-center py-8 px-6 gap-0 flex-shrink-0 min-h-screen sticky top-0 h-screen overflow-y-auto">
-      {/* Logo */}
-      <div className="font-rajdhani text-3xl font-bold letter-spacing-wider text-white mb-8">
-        ACDP
-      </div>
-
+    <nav className="hidden md:flex w-72 bg-navy text-white flex-col items-center py-8 px-6 gap-0 flex-shrink-0 sticky top-0 h-screen overflow-y-auto">
       {/* Profile Section */}
       <div className="flex flex-col items-center gap-3 pb-8 border-b border-white/20 w-full mb-4">
         <button

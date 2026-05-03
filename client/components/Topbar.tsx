@@ -13,6 +13,11 @@ export function Topbar({ userName, onSettingsClick }: TopbarProps) {
 
   return (
     <header className="bg-navy px-6 md:px-8 py-4 flex items-center justify-between border-b border-white/20 flex-shrink-0 sticky top-0 z-10 shadow-sm gap-4">
+      {/* Logo */}
+      <div className="font-rajdhani text-2xl font-bold letter-spacing-wider text-white flex-shrink-0">
+        ACDP
+      </div>
+
       {/* Search Bar */}
       <div className="flex-1 max-w-sm">
         <input
