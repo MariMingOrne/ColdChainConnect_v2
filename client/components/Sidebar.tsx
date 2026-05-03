@@ -51,9 +51,10 @@ export function Sidebar({ activePanel, onPanelChange, onLogout }: SidebarProps) 
           <button
             key={item.id}
             onClick={() => onPanelChange(item.id)}
+            style={activePanel === item.id ? { background: "linear-gradient(to right, #0546D7, #2B2CA5)" } : {}}
             className={`flex items-center justify-center px-6 py-3.5 rounded-full font-barlow text-sm font-semibold transition-all ${
               activePanel === item.id
-                ? "text-white bg-gradient-to-r from-accent-2 to-accent shadow-lg"
+                ? "text-white shadow-lg"
                 : "text-white/70 bg-white/10 hover:bg-white/20 hover:text-white"
             }`}
           >
@@ -66,9 +67,10 @@ export function Sidebar({ activePanel, onPanelChange, onLogout }: SidebarProps) 
           <button
             key={item.id}
             onClick={() => onPanelChange(item.id)}
+            style={activePanel === item.id ? { background: "linear-gradient(to right, #0546D7, #2B2CA5)" } : {}}
             className={`flex items-center justify-center px-6 py-3.5 rounded-full font-barlow text-sm font-semibold transition-all ${
               activePanel === item.id
-                ? "text-white bg-gradient-to-r from-accent-2 to-accent shadow-lg"
+                ? "text-white shadow-lg"
                 : "text-white/70 bg-white/10 hover:bg-white/20 hover:text-white"
             }`}
           >
@@ -81,9 +83,10 @@ export function Sidebar({ activePanel, onPanelChange, onLogout }: SidebarProps) 
           <button
             key={item.id}
             onClick={() => onPanelChange(item.id)}
+            style={activePanel === item.id ? { background: "linear-gradient(to right, #0546D7, #2B2CA5)" } : {}}
             className={`flex items-center justify-center px-6 py-3.5 rounded-full font-barlow text-sm font-semibold transition-all ${
               activePanel === item.id
-                ? "text-white bg-gradient-to-r from-accent-2 to-accent shadow-lg"
+                ? "text-white shadow-lg"
                 : "text-white/70 bg-white/10 hover:bg-white/20 hover:text-white"
             }`}
           >
