@@ -28,7 +28,7 @@ export function Sidebar({ activePanel, onPanelChange, onLogout }: SidebarProps) 
   return (
     <nav className="w-72 bg-navy text-white flex flex-col items-center flex-shrink-0 h-full">
       {/* Profile Section - Fixed at Top */}
-      <div className="flex flex-col items-center gap-4 py-8 px-6 w-full flex-shrink-0">
+      <div className="flex flex-col items-center gap-3 py-8 px-6 w-full flex-shrink-0">
         <button
           onClick={() => onPanelChange("settings")}
           className="w-20 h-20 rounded-full bg-gradient-to-br from-accent-2 to-navy-light flex items-center justify-center text-3xl font-bold border-2 border-accent-2 hover:border-gold hover:shadow-lg transition-all cursor-pointer"
@@ -36,13 +36,11 @@ export function Sidebar({ activePanel, onPanelChange, onLogout }: SidebarProps) 
         >
           👤
         </button>
-        <div className="flex items-center gap-2 w-full justify-center">
-          <div className="font-rajdhani text-sm font-semibold text-white">
-            Mizael Anton M.
-          </div>
-          <div className="bg-white text-navy text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
-            Assistant
-          </div>
+        <div className="font-rajdhani text-sm font-semibold text-center text-white">
+          Mizael Anton M.
+        </div>
+        <div className="bg-white text-navy text-xs font-semibold px-3 py-1 rounded-full">
+          Assistant
         </div>
       </div>
 
