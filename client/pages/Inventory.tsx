@@ -175,7 +175,28 @@ export function Inventory() {
     const savedSelectedBatch = localStorage.getItem(STORAGE_KEYS.SELECTED_BATCH);
 
     if (savedBatches) {
-      const parsedBatches = JSON.parse(savedBatches);
+      let parsedBatches = JSON.parse(savedBatches);
+
+      // Migrate old batch structure if needed (productIds -> items)
+      parsedBatches = parsedBatches.map((batch: any) => {
+        if (batch.productIds && !batch.items) {
+          // Old structure - migrate to new structure
+          return {
+            ...batch,
+            items: batch.productIds.map((productId: string) => {
+              const product = products.find((p) => p.id === productId);
+              return {
+                productId,
+                quantity: product?.quantity || 0,
+                expiryDate: product?.expiryDate || new Date().toISOString().split('T')[0],
+              };
+            }),
+            productIds: undefined,
+          };
+        }
+        return batch;
+      });
+
       setBatches(parsedBatches);
       setSelectedBatchId(savedSelectedBatch || parsedBatches[0]?.id);
     } else {
@@ -216,15 +237,18 @@ export function Inventory() {
 
   // Get products for current batch with batch-specific quantities and expiry dates
   const getBatchProducts = (): (InventoryProduct & { batchQuantity: number; batchExpiryDate: string })[] => {
-    if (!currentBatch) return [];
-    return currentBatch.items.map((item) => {
-      const product = products.find((p) => p.id === item.productId);
-      return {
-        ...product!,
-        batchQuantity: item.quantity,
-        batchExpiryDate: item.expiryDate,
-      };
-    });
+    if (!currentBatch || !currentBatch.items) return [];
+    return currentBatch.items
+      .map((item) => {
+        const product = products.find((p) => p.id === item.productId);
+        if (!product) return null;
+        return {
+          ...product,
+          batchQuantity: item.quantity,
+          batchExpiryDate: item.expiryDate,
+        };
+      })
+      .filter((item) => item !== null) as (InventoryProduct & { batchQuantity: number; batchExpiryDate: string })[];
   };
 
   // Get all products for the right panel
