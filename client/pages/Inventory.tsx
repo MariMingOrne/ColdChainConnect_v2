@@ -151,6 +151,7 @@ export function Inventory() {
   const [qrProduct, setQrProduct] = useState<InventoryProduct | null>(null);
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   const [newBatchName, setNewBatchName] = useState("");
+  const [showDeleteButtons, setShowDeleteButtons] = useState(false);
 
   // Form state for add/edit
   const [formData, setFormData] = useState<InventoryProduct>({
@@ -740,9 +741,30 @@ export function Inventory() {
 
         {/* Right Column: All Products Panel (35%) */}
         <div className="bg-white rounded-2xl border border-border p-6 h-fit">
-          <h2 className="font-rajdhani text-lg font-bold text-navy mb-4 letter-spacing-tight">
-            All Products
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-rajdhani text-lg font-bold text-navy letter-spacing-tight">
+              All Products
+            </h2>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowDeleteButtons(!showDeleteButtons)}
+                className="px-2 py-1 bg-white border border-border text-navy rounded text-xs font-semibold hover:bg-off-white"
+                title={showDeleteButtons ? "Hide delete buttons" : "Show delete buttons"}
+              >
+                {showDeleteButtons ? "🔒" : "🔓"}
+              </button>
+              <button
+                onClick={() => {
+                  resetForm();
+                  setIsModalOpen(true);
+                }}
+                className="px-2 py-1 bg-green text-white rounded text-xs font-semibold hover:opacity-90"
+                title="Add new product"
+              >
+                ＋
+              </button>
+            </div>
+          </div>
           <div className="space-y-2 max-h-96 overflow-y-auto">
             {allProducts.length === 0 ? (
               <div className="text-xs text-muted text-center py-4">
@@ -769,23 +791,24 @@ export function Inventory() {
                         })}
                       </div>
                     </div>
-                    {currentBatch && (
+                    <div className="flex gap-1">
                       <button
-                        onClick={() =>
-                          isInBatch
-                            ? removeProductFromBatch(product.id)
-                            : addProductToBatch(product.id)
-                        }
-                        className={`px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${
-                          isInBatch
-                            ? "bg-red text-white hover:opacity-90"
-                            : "bg-green text-white hover:opacity-90"
-                        }`}
-                        title={isInBatch ? "Remove from batch" : "Add to batch"}
+                        onClick={() => handleEdit(product)}
+                        className="px-2 py-1 bg-gold text-white rounded text-xs font-semibold hover:opacity-90"
+                        title="Edit product"
                       >
-                        {isInBatch ? "✕" : "＋"}
+                        ✏
                       </button>
-                    )}
+                      {showDeleteButtons && (
+                        <button
+                          onClick={() => handleDelete(product.id)}
+                          className="px-2 py-1 bg-red text-white rounded text-xs font-semibold hover:opacity-90"
+                          title="Delete product"
+                        >
+                          🗑
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })
