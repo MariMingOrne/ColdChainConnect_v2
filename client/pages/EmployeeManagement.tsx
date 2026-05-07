@@ -128,13 +128,13 @@ export function EmployeeManagement() {
     middleName: "",
     lastName: "",
     username: "",
-    position: "Assistant" as const,
+    position: "Assistant" as "Administrator" | "Assistant" | "Field Employee",
     email: "",
     phone: "",
     address: "",
     age: 0,
     dateOfBirth: "",
-    sex: "Male" as const,
+    sex: "Male" as "Male" | "Female",
   });
 
   const filteredEmployees = employees.filter(
