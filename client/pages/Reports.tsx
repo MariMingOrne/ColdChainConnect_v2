@@ -478,7 +478,6 @@ This is an official document and should be retained for record-keeping purposes.
             { id: "sales", label: "Sales Reports", icon: "📊" },
             { id: "inventory", label: "Inventory", icon: "📦" },
             { id: "customer", label: "Customer", icon: "👥" },
-            { id: "supplier", label: "Supplier", icon: "🏭" },
             { id: "performance", label: "Performance", icon: "📈" },
             { id: "profit", label: "Profit", icon: "💰" },
           ].map((tab) => (
@@ -751,82 +750,6 @@ This is an official document and should be retained for record-keeping purposes.
           </div>
         )}
 
-        {/* Supplier Reports */}
-        {activeTab === "supplier" && (
-          <div className="space-y-6">
-            <Card className="p-6 overflow-hidden">
-              <h2 className="text-2xl font-bold text-navy mb-4">
-                Supplier-wise Inventory
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Inventory sourced from each supplier
-              </p>
-
-              <div className="overflow-x-auto scrollbar-visible">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border bg-off-white">
-                      <th className="text-left py-3 px-4 font-semibold text-navy">
-                        Supplier ID
-                      </th>
-                      <th className="text-left py-3 px-4 font-semibold text-navy">
-                        Supplier Name
-                      </th>
-                      <th className="text-right py-3 px-4 font-semibold text-navy">
-                        Products
-                      </th>
-                      <th className="text-right py-3 px-4 font-semibold text-navy">
-                        Inventory Value
-                      </th>
-                      <th className="text-left py-3 px-4 font-semibold text-navy">
-                        Last Restock
-                      </th>
-                      <th className="text-left py-3 px-4 font-semibold text-navy">
-                        Reorder Due
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockSupplierReports.map((supplier, idx) => (
-                      <tr key={idx} className="border-b border-border hover:bg-off-white">
-                        <td className="py-3 px-4 font-mono text-gray-700">
-                          {supplier.supplierId}
-                        </td>
-                        <td className="py-3 px-4 text-gray-700 font-medium">
-                          {supplier.supplierName}
-                        </td>
-                        <td className="py-3 px-4 text-right text-gray-700 font-semibold">
-                          {supplier.productsSupplied}
-                        </td>
-                        <td className="py-3 px-4 text-right text-gray-700 font-semibold">
-                          ₱{supplier.totalInventoryValue.toLocaleString()}
-                        </td>
-                        <td className="py-3 px-4 text-gray-700">
-                          {supplier.lastRestock}
-                        </td>
-                        <td className="py-3 px-4 text-gray-700">
-                          {supplier.reorderDue}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="mt-6 flex gap-2">
-                <Button
-                  onClick={() =>
-                    handleExport("excel", "Supplier Report")
-                  }
-                  disabled={isExporting}
-                  className="bg-accent hover:bg-accent-dark text-white"
-                >
-                  📥 Export to Excel
-                </Button>
-              </div>
-            </Card>
-          </div>
-        )}
 
         {/* Performance Metrics */}
         {activeTab === "performance" && (
