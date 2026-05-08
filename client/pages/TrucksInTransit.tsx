@@ -361,6 +361,12 @@ export function TrucksInTransit() {
             Active: {trucks.filter((t) => t.status === "in_transit").length} | Completed: {trucks.filter((t) => t.status === "completed").length}
           </div>
           <button
+            onClick={() => setShowQRScanner(true)}
+            className="px-4 py-2 bg-accent-2 text-white rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity"
+          >
+            📱 Scan QR Code
+          </button>
+          <button
             onClick={() => setShowAddTruckModal(true)}
             className="px-4 py-2 bg-accent-2 text-white rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity"
           >
@@ -493,12 +499,6 @@ export function TrucksInTransit() {
                 Items in Transit
               </h3>
               <div className="flex gap-2">
-                <button
-                  onClick={() => setShowQRScanner(true)}
-                  className="px-4 py-2 bg-accent-2 text-white rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity"
-                >
-                  📱 Scan QR Code
-                </button>
                 {selectedTruck.status === "completed" && (
                   <button
                     onClick={() => handleRemoveTruck(selectedTruck.id)}
