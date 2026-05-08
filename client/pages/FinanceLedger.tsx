@@ -460,7 +460,7 @@ export function FinanceLedger() {
         </div>
 
         {/* Main Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <Card className="p-6 border-l-4 border-l-green bg-gradient-to-br from-green/5 to-transparent">
             <div className="flex items-start justify-between">
               <div>
