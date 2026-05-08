@@ -256,7 +256,55 @@ export function Reports() {
   const handleExport = async (format: "excel" | "pdf", reportType: string) => {
     setIsExporting(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      let csvContent = "";
+      const currentDate = new Date().toLocaleDateString();
+
+      if (reportType === "Sales Report") {
+        csvContent = "Sales Report\n";
+        csvContent += `Generated: ${currentDate}\n\n`;
+        csvContent += "Period,Total Revenue,Total Transactions,Average Transaction,Top Product,Top Product Sales\n";
+        mockSalesReports.forEach((report) => {
+          csvContent += `${report.period},${report.totalRevenue},${report.totalTransactions},${report.averageTransaction.toFixed(2)},${report.topProduct},${report.topProductSales}\n`;
+        });
+      } else if (reportType === "Inventory Report") {
+        csvContent = "Inventory Report\n";
+        csvContent += `Generated: ${currentDate}\n\n`;
+        csvContent += "SKU,Product Name,Current Stock,Reorder Level,Status,Value,Expiry Date\n";
+        mockInventoryReports.forEach((item) => {
+          csvContent += `${item.sku},"${item.productName}",${item.currentStock},${item.reorderLevel},${item.status},${item.value},${item.expiryDate}\n`;
+        });
+      } else if (reportType === "Customer Report") {
+        csvContent = "Customer Report\n";
+        csvContent += `Generated: ${currentDate}\n\n`;
+        csvContent += "Customer ID,Customer Name,Total Purchases,Total Spent,Last Purchase Date,Frequency\n";
+        mockCustomerReports.forEach((customer) => {
+          csvContent += `${customer.customerId},"${customer.customerName}",${customer.totalPurchases},${customer.totalSpent},${customer.lastPurchaseDate},"${customer.frequency}"\n`;
+        });
+      } else if (reportType === "Performance Metrics") {
+        csvContent = "Performance Metrics Report\n";
+        csvContent += `Generated: ${currentDate}\n\n`;
+        csvContent += "Ranking,Product Name,Units Sold,Revenue,Growth %\n";
+        mockPerformanceMetrics.forEach((metric) => {
+          csvContent += `#${metric.ranking},${metric.productName},${metric.unitsSold},${metric.revenue},${metric.growth}\n`;
+        });
+      } else if (reportType === "Profit Report") {
+        csvContent = "Profit Report\n";
+        csvContent += `Generated: ${currentDate}\n\n`;
+        csvContent += "Product Name,Unit Price,Cost Price,Profit Margin %,Quantity Sold,Total Profit\n";
+        mockProfitData.forEach((profit) => {
+          csvContent += `"${profit.productName}",${profit.unitPrice},${profit.costPrice},${profit.profitMargin},${profit.quantitySold},${profit.totalProfit}\n`;
+        });
+      }
+
+      const element = document.createElement('a');
+      const file = new Blob([csvContent], { type: 'text/csv' });
+      element.href = URL.createObjectURL(file);
+      element.download = `${reportType.replace(/\s+/g, '_')}_${new Date().getTime()}.csv`;
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+      URL.revokeObjectURL(element.href);
+
       toast({
         title: "Success",
         description: `${reportType} exported as ${format.toUpperCase()} successfully.`,
