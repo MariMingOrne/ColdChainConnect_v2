@@ -460,64 +460,7 @@ export function FinanceLedger() {
         </div>
 
         {/* Main Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <Card className="p-6 border-l-4 border-l-accent bg-gradient-to-br from-navy/5 to-transparent">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="text-sm font-semibold text-muted mb-1">
-                  Total Expenses
-                </h3>
-                <p className="text-2xl md:text-3xl font-bold text-navy">
-                  ₱{totalExpenses.toLocaleString()}
-                </p>
-                <p className="text-xs text-muted mt-2">
-                  {expenseRecords.length} records
-                </p>
-              </div>
-              <div className="bg-accent/10 p-3 rounded-lg">
-                <TrendingDown className="text-accent" size={24} />
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 border-l-4 border-l-accent-2 bg-gradient-to-br from-accent-2/5 to-transparent">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="text-sm font-semibold text-muted mb-1">
-                  Operational Costs
-                </h3>
-                <p className="text-2xl md:text-3xl font-bold text-navy">
-                  ₱{totalOperational.toLocaleString()}
-                </p>
-                <p className="text-xs text-muted mt-2">
-                  {expenseRecords.length} entries
-                </p>
-              </div>
-              <div className="bg-accent-2/10 p-3 rounded-lg">
-                <DollarSign className="text-accent-2" size={24} />
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 border-l-4 border-l-gold bg-gradient-to-br from-gold/5 to-transparent">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="text-sm font-semibold text-muted mb-1">
-                  Maintenance Costs
-                </h3>
-                <p className="text-2xl md:text-3xl font-bold text-navy">
-                  ₱{totalMaintenance.toLocaleString()}
-                </p>
-                <p className="text-xs text-muted mt-2">
-                  {expenseRecords.length} records
-                </p>
-              </div>
-              <div className="bg-gold/10 p-3 rounded-lg">
-                <TrendingUp className="text-gold" size={24} />
-              </div>
-            </div>
-          </Card>
-
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <Card className="p-6 border-l-4 border-l-green bg-gradient-to-br from-green/5 to-transparent">
             <div className="flex items-start justify-between">
               <div>
